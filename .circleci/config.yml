@@ -20,4 +20,5 @@ jobs:
                     pip install awscli
                     apt-get clean && apt-get autoclean
 
+      - run: cp daemon/src/main/resources/application.conf.sample daemon/src/main/resources/application.conf
       - run: sbt "daemon/run -http.port=:8889 -admin.port=:3335"
