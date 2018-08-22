@@ -19,13 +19,12 @@ jobs:
                     apt-get install -y sbt python-pip git
                     pip install awscli
                     apt-get clean && apt-get autoclean
+                    sbt "daemon/run -http.port=:8889 -admin.port=:3335"
       - checkout
       - restore_cache:
           key: sbt-cache
       - run:
-          name: Compile samplescala dist package
-          command: cat /dev/null | sbt clean update dist | sbt "daemon/run -http.port=:8889 -admin.port=:3335"
-          destination: samplescala
+          command: sbt "daemon/run -http.port=:8889 -admin.port=:3335"
       - save_cache:
           key: sbt-cache
           paths:
