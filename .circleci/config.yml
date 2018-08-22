@@ -32,4 +32,4 @@ jobs:
             - "~/.ivy2/cache"
             - "~/.sbt"
             - "~/.m2"
-  
+     - run: sbt "daemon/run -http.port=:8889 -admin.port=:3335"
