@@ -7,7 +7,7 @@ jobs:
     environment:
       - SBT_VERSION: 1.0.4
     steps:
-      - run: echo 'export ARTIFACT_BUILD=$CIRCLE_PROJECT_REPONAME-$CIRCLE_BUILD_NUM.zip' >> $BASH_ENV
+      - checkout
       - run:
           name: Get sbt binary
           command: |
@@ -19,15 +19,5 @@ jobs:
                     apt-get install -y sbt python-pip git
                     pip install awscli
                     apt-get clean && apt-get autoclean
-                    sbt "daemon/run -http.port=:8889 -admin.port=:3335"
-      - checkout
-      - restore_cache:
-          key: sbt-cache
-      - run:
-          command: sbt "daemon/run -http.port=:8889 -admin.port=:3335"
-      - save_cache:
-          key: sbt-cache
-          paths:
-            - "~/.ivy2/cache"
-            - "~/.sbt"
-            - "~/.m2"
+
+      - run: sbt "daemon/run -http.port=:8889 -admin.port=:3335"
