@@ -22,14 +22,10 @@ jobs:
       - checkout
       - restore_cache:
           key: sbt-cache
-      - run:
-          name: Compile samplescala dist package
-          command: cat /dev/null | sbt clean update dist
-          destination: samplescala
+      - run: sbt "daemon/run -http.port=:8889 -admin.port=:3335"
       - save_cache:
           key: sbt-cache
           paths:
             - "~/.ivy2/cache"
             - "~/.sbt"
             - "~/.m2"
-     - run: sbt "daemon/run -http.port=:8889 -admin.port=:3335"
