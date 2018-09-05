@@ -1,7 +1,12 @@
-
-# Pull base image
-# Using a ubuntu configuration for stdc++
 FROM ubuntu:16.04
+
+# Env variables
+ENV SCALA_VERSION 2.12.4
+ENV SBT_VERSION 1.0.4
+ENV JAVA_TOOL_OPTIONS -Dfile.encoding=UTF8
+
+#Install curl
+RUN apt-get update && apt-get install -y curl && apt-get clean && rm -rf /var/lib/apt/lists
 
 # Install Java.
 RUN apt-get -qq update
@@ -18,16 +23,8 @@ RUN apt-get update && \
 
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 
-# Env variables
-ENV SCALA_VERSION 2.12.4
-ENV SBT_VERSION 1.0.4
-
-# Scala expects this file
-
-
 # Install Scala
 ## Piping curl directly in tar
-
 RUN \
   curl -fsL https://downloads.typesafe.com/scala/$SCALA_VERSION/scala-$SCALA_VERSION.tgz | tar xfz - -C /root/ && \
   echo >> /root/.bashrc && \
@@ -44,8 +41,6 @@ RUN \
 
 COPY . /app
 WORKDIR /app
-EXPOSE 8888
+#EXPOSE 8888
 
-RUN sbt daemon/compile
-
-CMD sbt daemon/run
+CMD sbt "daemon/run -http.port=:8889 -admin.port=:3335"
